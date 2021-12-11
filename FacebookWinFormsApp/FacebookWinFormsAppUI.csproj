@@ -125,6 +125,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FacebookAPI\FacebookAPI.csproj">
+      <Project>{0c8f9375-e94a-4cd8-9a75-7dcdc52c3899}</Project>
+      <Name>FacebookAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FourInARowGame\FourInARowGame.csproj">
       <Project>{bfad2d8f-ba4c-4806-ad61-c144d926ccbe}</Project>
       <Name>FourInARowGame</Name>

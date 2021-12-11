@@ -12,7 +12,9 @@ using CefSharp.DevTools.Fetch;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 using DesktopApplication;
+using Facebook;
 using SortLikesPostThatLikedByUser;
+using FacebookAPIHandler;
 
 using Message = System.Windows.Forms.Message;
 //Eden!
@@ -25,43 +27,20 @@ namespace FacebookWinFormsAppUI
         {
             InitializeComponent();
             FacebookWrapper.FacebookService.s_CollectionLimit = 200;
-            //knhknkjnkjnkjnjn
         }
 
-
-
-        public UserLikesCounterList UserLikesCounterList { get; set; }
-
-        public User LoggedInUser { get; set; }
-        
-        public LoginResult LoginResult { get; set; }
+        public FacebookAPI FacebookAPILogic { get; set; }
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             Clipboard.SetText("eliranshimonov@gmail.com"); /// the current password for Eliran
+            FacebookAPILogic = new FacebookAPI();
+            FacebookAPILogic.facebookLogin();
 
-            LoginResult = FacebookService.Login(
-                "554914478908153",
-                    "email",
-                    "public_profile",
-                    "user_age_range",
-                    "user_birthday",
-                    "user_events",
-                    "user_friends",
-                    "user_gender",
-                    "user_hometown",
-                    "user_likes",
-                    "user_link",
-                    "user_location",
-                    "user_photos",
-                    "user_posts",
-                    "user_videos"
-            );
-
-            if (!string.IsNullOrEmpty(LoginResult.AccessToken))
+            if (!string.IsNullOrEmpty(FacebookAPILogic.LoginResult.AccessToken))
             {
-                LoggedInUser = LoginResult.LoggedInUser;
-                pictureBoxProfile.LoadAsync(LoggedInUser.Albums[1].Photos[0].PictureNormalURL);//adapter?
+                FacebookAPILogic.LoggedInUser = FacebookAPILogic.LoginResult.LoggedInUser;
+                pictureBoxProfile.LoadAsync(FacebookAPILogic.LoggedInUser.Albums[1].Photos[0].PictureNormalURL);//adapter?
                 buttonLogin.Enabled = false;
             }
             else
@@ -83,7 +62,7 @@ namespace FacebookWinFormsAppUI
             pictureBoxGeneral.Image = null;
             listBoxGeneral.Items.Clear();
             listBoxGeneralOutput.Items.Clear();
-            LoggedInUser = null;
+            FacebookAPILogic.LoggedInUser = null;
         }
 
 
@@ -101,7 +80,7 @@ namespace FacebookWinFormsAppUI
             {
                 try
                 {
-                    foreach (User chosenFriend in LoggedInUser.Friends)
+                    foreach (User chosenFriend in FacebookAPILogic.LoggedInUser.Friends)
                     {
                         listBoxGeneral.Items.Add(chosenFriend);
                     }
@@ -132,7 +111,7 @@ namespace FacebookWinFormsAppUI
             {
                 try
                 {
-                    foreach (Album chosenAlbum in LoggedInUser.Albums)
+                    foreach (Album chosenAlbum in FacebookAPILogic.LoggedInUser.Albums)
                     {
                         listBoxGeneral.Items.Add(chosenAlbum);
                     }
@@ -163,7 +142,7 @@ namespace FacebookWinFormsAppUI
             {
                 try
                 {
-                    foreach (Group chosenGroup in LoggedInUser.Groups)
+                    foreach (Group chosenGroup in FacebookAPILogic.LoggedInUser.Groups)
                     {
                         pictureBoxGeneral.Visible = true;
                         listBoxGeneral.Items.Add(chosenGroup);
@@ -196,7 +175,7 @@ namespace FacebookWinFormsAppUI
             if (loginHandler())
             {
                 FormGame desktopGame = new FormGame();
-                desktopGame.RunGameSettings(LoggedInUser.FirstName);
+                desktopGame.RunGameSettings(FacebookAPILogic.LoggedInUser.FirstName);
             }
         }
         private void pictureBoxPosts_DoubleClick(object sender, System.EventArgs e)
@@ -214,7 +193,7 @@ namespace FacebookWinFormsAppUI
             {
                 try
                 {
-                    foreach (Post chosenPost in LoggedInUser.Posts)
+                    foreach (Post chosenPost in FacebookAPILogic.LoggedInUser.Posts)
                     {
                         if (chosenPost.Message != null)
                         {
@@ -279,7 +258,7 @@ namespace FacebookWinFormsAppUI
             }
             else if (listBoxGeneral.SelectedItem is String)
             {
-                Post chosenPost = LoggedInUser.Posts[listBoxGeneral.SelectedIndex];
+                Post chosenPost = FacebookAPILogic.LoggedInUser.Posts[listBoxGeneral.SelectedIndex];
                 foreach (Comment comment in chosenPost.Comments)
                 {
                     listBoxGeneralOutput.Items.Add(comment);
@@ -308,8 +287,8 @@ namespace FacebookWinFormsAppUI
                     addLikeToUsersWhoLikedYou();
 
                     Comparison<UserLikesCounter> comparison =
-                        new Comparison<UserLikesCounter>(UserLikesCounterList.sortByLikes); //ToDo rename the function
-                    UserLikesCounterList.CountersList.Sort(comparison);
+                        new Comparison<UserLikesCounter>(FacebookAPILogic.UserLikesCounterList.sortByLikes); //ToDo rename the function
+                    FacebookAPILogic.UserLikesCounterList.CountersList.Sort(comparison);
                     listBoxGeneral.Items.Clear();
 
                     showTop3Friends();
@@ -343,7 +322,7 @@ namespace FacebookWinFormsAppUI
         {
             int countToThree = 0;
 
-            foreach (UserLikesCounter user in UserLikesCounterList.CountersList)
+            foreach (UserLikesCounter user in FacebookAPILogic.UserLikesCounterList.CountersList)
             {
                 listBoxGeneral.Items.Add(user.LikedByUser);
                 listBoxGeneral.Items.Add(user.Likes);
@@ -358,19 +337,19 @@ namespace FacebookWinFormsAppUI
 
         void addLikeToUsersWhoLikedYou()
         {
-            foreach (Post post in LoggedInUser.Posts)
+            foreach (Post post in FacebookAPILogic.LoggedInUser.Posts)
             {
                 foreach (User user in post.LikedBy)
                 {
-                    UserLikesCounter userLikesCounter = UserLikesCounterList.UserExistInList(user);
+                    UserLikesCounter userLikesCounter = FacebookAPILogic.UserLikesCounterList.UserExistInList(user);
 
                     if (userLikesCounter != null)
                     {
-                        UserLikesCounterList.addALikeCountsToUser(userLikesCounter);
+                        FacebookAPILogic.UserLikesCounterList.addALikeCountsToUser(userLikesCounter);
                     }
                     else
                     {
-                        UserLikesCounterList.addNewUserToLikeCountsList(user);
+                        FacebookAPILogic.UserLikesCounterList.addNewUserToLikeCountsList(user);
                     }
                 }
             }
@@ -379,7 +358,7 @@ namespace FacebookWinFormsAppUI
         private bool loginHandler()
         {
             bool userLogedin = true;
-            if (LoggedInUser == null)
+            if (FacebookAPILogic.LoggedInUser == null)
             {
                 MessageBox.Show("Please log-in first");
                 userLogedin = false;
@@ -394,7 +373,7 @@ namespace FacebookWinFormsAppUI
             {
                 try
                 {
-                    Status postedStatus = LoggedInUser.PostStatus(textBoxPost.Text);
+                    Status postedStatus = FacebookAPILogic.LoggedInUser.PostStatus(textBoxPost.Text);
                     MessageBox.Show("Status Posted! ID: " + postedStatus.Id);
                 }
                 catch (Exception ex)

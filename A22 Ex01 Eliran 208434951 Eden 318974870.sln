@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FourInARowLogic", "FourInAR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortLikesPostThatLikedByUser", "SortLikesPostThatLikedByUser\SortLikesPostThatLikedByUser.csproj", "{84FDDF5F-7B13-43CD-A817-FCBEF371A09A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookAPI", "FacebookAPI\FacebookAPI.csproj", "{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{84FDDF5F-7B13-43CD-A817-FCBEF371A09A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84FDDF5F-7B13-43CD-A817-FCBEF371A09A}.Release|x64.ActiveCfg = Release|Any CPU
 		{84FDDF5F-7B13-43CD-A817-FCBEF371A09A}.Release|x64.Build.0 = Release|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C8F9375-E94A-4CD8-9A75-7DCDC52C3899}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
