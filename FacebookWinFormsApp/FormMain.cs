@@ -58,7 +58,7 @@ namespace FacebookWinFormsAppUI
             if (!string.IsNullOrEmpty(LoginResult.AccessToken))
             {
                 LoggedInUser = LoginResult.LoggedInUser;
-                showPicture(LoggedInUser.PictureNormalURL);
+                pictureBoxProfile.LoadAsync(LoggedInUser.Albums[1].Photos[0].PictureNormalURL);//adapter?
                 buttonLogin.Enabled = false;
             }
             else
@@ -67,17 +67,9 @@ namespace FacebookWinFormsAppUI
             }
         }
 
-        private void showPicture(string i_Picture)
-        {
-            pictureBoxProfile.LoadAsync(i_Picture);
-            buttonLogin.Enabled = true;
-        }
-
         private void buttonLogout_Click(object sender, EventArgs e)
         {
-            pictureBoxGeneral.Invalidate();
             FacebookService.LogoutWithUI();
-            buttonLogin.Text = "Login";
             resetAllForm();
         }
 
@@ -256,7 +248,7 @@ namespace FacebookWinFormsAppUI
 
             if (listBoxGeneral.SelectedItem is Photo)
             {
-                pictureBoxGeneral.LoadAsync((listBoxGeneral.SelectedItem as Photo).PictureNormalURL);
+                loadPhoto((listBoxGeneral.SelectedItem as Photo).PictureNormalURL);
             }
             else if (listBoxGeneral.SelectedItem is Album)
             {
@@ -267,7 +259,7 @@ namespace FacebookWinFormsAppUI
             }
             else if (listBoxGeneral.SelectedItem is User)
             {
-                pictureBoxGeneral.LoadAsync((listBoxGeneral.SelectedItem as User).PictureNormalURL);
+                loadPhoto((listBoxGeneral.SelectedItem as User).Albums[1].Photos[0].PictureNormalURL);
                 listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Birthday);
                 listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Gender);
                 //listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Email);
@@ -276,7 +268,7 @@ namespace FacebookWinFormsAppUI
             }
             else if (listBoxGeneral.SelectedItem is Group)
             {
-                pictureBoxGeneral.LoadAsync((listBoxGeneral.SelectedItem as Group).PictureNormalURL);
+                loadPhoto((listBoxGeneral.SelectedItem as Group).PictureNormalURL);
                 foreach (User goupMember in (listBoxGeneral.SelectedItem as Group).Members)
                 {
                     listBoxGeneralOutput.Items.Add(goupMember);
@@ -291,7 +283,7 @@ namespace FacebookWinFormsAppUI
                 }
                 if (chosenPost.Type == Post.eType.photo)
                 {
-                    pictureBoxGeneral.LoadAsync(chosenPost.PictureURL);
+                    loadPhoto(chosenPost.PictureURL);
                 }
 
             }
@@ -335,8 +327,13 @@ namespace FacebookWinFormsAppUI
         {
             if (listBoxGeneralOutput.SelectedItem is Photo)
             {
-                pictureBoxGeneral.LoadAsync((listBoxGeneralOutput.SelectedItem as Photo).PictureNormalURL);
+                loadPhoto((listBoxGeneralOutput.SelectedItem as Photo).PictureNormalURL);
             }
+        }
+
+        void loadPhoto(string i_Picture)
+        {
+            pictureBoxGeneral.LoadAsync(i_Picture);
         }
 
         void showTop3Friends()
