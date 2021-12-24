@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 
-namespace FacebookWinFormsAppUI
+namespace BasicFacebookFeatures
 {
     partial class FormMain
     {
@@ -33,8 +33,8 @@ namespace FacebookWinFormsAppUI
         /// </summary>
         private void InitializeComponent()
         {
-            this.postButton = new System.Windows.Forms.Button();
             this.buttonLogout = new System.Windows.Forms.Button();
+            this.checkBoxRememberMe = new System.Windows.Forms.CheckBox();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.listBoxGeneral = new System.Windows.Forms.ListBox();
             this.listBoxGeneralOutput = new System.Windows.Forms.ListBox();
@@ -60,16 +60,6 @@ namespace FacebookWinFormsAppUI
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFriends)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMyApp)).BeginInit();
             this.SuspendLayout();
-            // 
-            // postButton
-            // 
-            this.postButton.Location = new System.Drawing.Point(1341, 23);
-            this.postButton.Margin = new System.Windows.Forms.Padding(4);
-            this.postButton.Name = "postButton";
-            this.postButton.Size = new System.Drawing.Size(100, 28);
-            this.postButton.TabIndex = 65;
-            this.postButton.Text = "Post";
-            this.postButton.UseVisualStyleBackColor = true;
             // 
             // buttonLogout
             // 
@@ -239,6 +229,16 @@ namespace FacebookWinFormsAppUI
             this.textBoxPost.TabIndex = 64;
             this.textBoxPost.Text = "Write somthing";
             // 
+            // checkBoxRememberMe
+            // 
+            this.checkBoxRememberMe.AutoSize = true;
+            this.checkBoxRememberMe.Location = new System.Drawing.Point(16, 631);
+            this.checkBoxRememberMe.Name = "checkBoxRememberMe";
+            this.checkBoxRememberMe.Size = new System.Drawing.Size(148, 26);
+            this.checkBoxRememberMe.TabIndex = 67;
+            this.checkBoxRememberMe.Text = "RememberMe";
+            this.checkBoxRememberMe.UseVisualStyleBackColor = true;
+            // 
             // buttonPost
             // 
             this.buttonPost.Location = new System.Drawing.Point(1006, 19);
@@ -271,7 +271,7 @@ namespace FacebookWinFormsAppUI
             this.Controls.Add(this.pictureBoxTop3Likes);
             this.Controls.Add(this.pictureBoxFriends);
             this.Controls.Add(this.pictureBoxMyApp);
-            this.Controls.Add(this.postButton);
+            this.Controls.Add(this.checkBoxRememberMe);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
@@ -296,6 +296,7 @@ namespace FacebookWinFormsAppUI
 
         private System.Windows.Forms.PictureBox pictureBoxFriends;
         private System.Windows.Forms.PictureBox pictureBoxTop3Likes;
+        private System.Windows.Forms.CheckBox checkBoxRememberMe;
         private System.Windows.Forms.PictureBox pictureBoxGeneral;
         private System.Windows.Forms.PictureBox pictureBoxAlbums;
         private System.Windows.Forms.PictureBox pictureBoxGroups;
@@ -308,7 +309,6 @@ namespace FacebookWinFormsAppUI
         private PictureBox pictureBoxPosts;
         private TextBox textBoxManu;
         private PictureBox pictureBoxNew;
-        private System.Windows.Forms.Button postButton;
         private TextBox textBoxPost;
         private Button buttonPost;
     }

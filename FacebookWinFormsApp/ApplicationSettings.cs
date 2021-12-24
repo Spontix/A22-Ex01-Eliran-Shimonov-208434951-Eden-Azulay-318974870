@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Drawing;
 using System.Reflection;
-using FacebookWinFormsAppUI;
 
 namespace BasicFacebookFeatures
 {
@@ -28,7 +27,7 @@ namespace BasicFacebookFeatures
 
         static ApplicationSettings()
         {
-            sr_NameOfFile = Application.ExecutablePath + "settings.xml";
+            sr_NameOfFile = Application.ExecutablePath + ".settings.xml";
         }
 
         public static ApplicationSettings Instance
@@ -44,7 +43,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        public void save()
+        public void Save()
         {
             using (FileStream stream = new FileStream(sr_NameOfFile, FileMode.Create))
             {
@@ -70,7 +69,7 @@ namespace BasicFacebookFeatures
                 loadOrDefault = new ApplicationSettings()
                 {
                     LastWindowState = FormWindowState.Normal,
-                    LastWindowSize = new Size(800, 500),
+                    LastWindowSize = new Size(831,575),
                     AutoLogin = false
                 };
             }
