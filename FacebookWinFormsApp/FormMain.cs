@@ -28,7 +28,7 @@ namespace BasicFacebookFeatures
         {
             FacebookAPILogic = new FacebookAPI();
             InitializeComponent();
-            FacebookWrapper.FacebookService.s_CollectionLimit = 200;
+            FacebookWrapper.FacebookService.s_CollectionLimit = 50;
         }
 
         public FacebookAPI FacebookAPILogic { get; set; }
@@ -290,6 +290,7 @@ namespace BasicFacebookFeatures
                 }
             }
         }
+
 
         private void listBoxGeneral_SelectedIndexChanged(object sender, EventArgs e)
         {
