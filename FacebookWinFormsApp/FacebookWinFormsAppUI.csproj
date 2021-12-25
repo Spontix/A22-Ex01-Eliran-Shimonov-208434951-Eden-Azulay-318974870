@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>

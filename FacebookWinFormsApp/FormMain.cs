@@ -31,6 +31,7 @@ namespace BasicFacebookFeatures
             FacebookWrapper.FacebookService.s_CollectionLimit = 50;
         }
 
+        private Adapter m_adapter;
         public FacebookAPI FacebookAPILogic { get; set; }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -109,6 +110,7 @@ namespace BasicFacebookFeatures
             {
                 this.Invoke(new Action(() =>
                 {
+                    m_adapter = new Adapter(FacebookAPILogic.LoggedInUser);
                     pictureBoxProfile.LoadAsync(FacebookAPILogic.LoggedInUser.Albums[1].Photos[0].PictureNormalURL);
                     buttonLogin.Enabled = false;
                 }));
@@ -296,7 +298,8 @@ namespace BasicFacebookFeatures
         {
             pictureBoxGeneral.Image = null;
             listBoxGeneralOutput.Items.Clear();
-
+            m_adapter.SetType(listBoxGeneral , listBoxGeneralOutput, pictureBoxGeneral);
+            /*
             if (listBoxGeneral.SelectedItem is Photo)
             {
                 loadPhoto((listBoxGeneral.SelectedItem as Photo).PictureNormalURL);
@@ -313,9 +316,7 @@ namespace BasicFacebookFeatures
                 loadPhoto((listBoxGeneral.SelectedItem as User).Albums[1].Photos[0].PictureNormalURL);
                 listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Birthday);
                 listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Gender);
-                //listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Email);
                 listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).About);
-                //listBoxGeneralOutput.Items.Add((listBoxGeneral.SelectedItem as User).Educations);
             }
             else if (listBoxGeneral.SelectedItem is Group)
             {
@@ -337,7 +338,7 @@ namespace BasicFacebookFeatures
                     loadPhoto(chosenPost.PictureURL);
                 }
 
-            }
+            }*/
 
         }
 
