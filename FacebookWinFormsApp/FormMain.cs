@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using CefSharp.DevTools.Fetch;
 using FacebookWrapper.ObjectModel;
@@ -19,35 +20,102 @@ using FacebookAPIHandler;
 using Message = System.Windows.Forms.Message;
 //Eden!
 //Eliran!
-namespace FacebookWinFormsAppUI
+namespace BasicFacebookFeatures
 {
     public partial class FormMain : Form
     {
         public FormMain()
         {
+            FacebookAPILogic = new FacebookAPI();
             InitializeComponent();
-            FacebookWrapper.FacebookService.s_CollectionLimit = 200;
+            FacebookWrapper.FacebookService.s_CollectionLimit = 50;
         }
 
         public FacebookAPI FacebookAPILogic { get; set; }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            ApplicationSettings.Instance.LastWindowState = this.WindowState;
+            ApplicationSettings.Instance.LastWindowSize = this.ClientSize;
+            ApplicationSettings.Instance.LastWindowLocation = this.Location;
+            ApplicationSettings.Instance.AutoLogin = this.checkBoxRememberMe.Checked;
+            ApplicationSettings.Instance.Save();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            
+            this.ClientSize = ApplicationSettings.Instance.LastWindowSize;
+            this.WindowState = ApplicationSettings.Instance.LastWindowState;
+            this.Location = ApplicationSettings.Instance.LastWindowLocation;
+            this.checkBoxRememberMe.Checked = ApplicationSettings.Instance.AutoLogin;
+
+            if (ApplicationSettings.Instance.AutoLogin)
+            {
+                new Thread(this.autoLogin).Start();
+            }
+        }
+
+        private void autoLogin()
+        {
+            try
+            {
+                LoginResult result = FacebookService.Connect(ApplicationSettings.Instance.AccessToken);
+                FacebookAPILogic.LoggedInUser = result.LoggedInUser;
+                fetchUserInfo();
+            }
+            catch (Exception ex)
+            {
+                ///(OAuthException - #190) Error validating access token: Session has expired..
+                if (ex.Message.Contains("#190"))
+                {
+                    this.Invoke((Action)loginAndInit);
+                }
+                else
+                {
+                    this.Invoke(new Action(() => MessageBox.Show("Could not connect to Facebook server. Please try again later..")));
+                }
+            }
+        }
+
+
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText("eliranshimonov@gmail.com"); /// the current password for Eliran
-            FacebookAPILogic = new FacebookAPI();
-            FacebookAPILogic.facebookLogin();
+            loginAndInit();
+        }
 
+        private void loginAndInit()
+        {
+            Clipboard.SetText("eliranshimonov@gmail.com"); /// the current password for Eliran
+            FacebookAPILogic.facebookLogin();
             if (!string.IsNullOrEmpty(FacebookAPILogic.LoginResult.AccessToken))
             {
                 FacebookAPILogic.LoggedInUser = FacebookAPILogic.LoginResult.LoggedInUser;
-                pictureBoxProfile.LoadAsync(FacebookAPILogic.LoggedInUser.Albums[1].Photos[0].PictureNormalURL);//adapter?
-                buttonLogin.Enabled = false;
+                ApplicationSettings.Instance.AccessToken = FacebookAPILogic.LoginResult.AccessToken;
+                fetchUserInfo();
             }
             else
             {
                 MessageBox.Show("Log-in Field");
             }
         }
+
+        private void fetchUserInfo()
+        {
+            new Thread(() =>
+            {
+                this.Invoke(new Action(() =>
+                {
+                    pictureBoxProfile.LoadAsync(FacebookAPILogic.LoggedInUser.Albums[1].Photos[0].PictureNormalURL);
+                    buttonLogin.Enabled = false;
+                }));
+            }).Start();
+        }
+        
+
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
@@ -222,6 +290,7 @@ namespace FacebookWinFormsAppUI
                 }
             }
         }
+
 
         private void listBoxGeneral_SelectedIndexChanged(object sender, EventArgs e)
         {
