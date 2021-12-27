@@ -451,6 +451,49 @@ namespace BasicFacebookFeatures
             }
         }
 
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabelEvents_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            fetchEvents();
+        }
+
+        private void fetchEvents()
+        {
+            if (loginHandler())
+            {
+
+                try
+                {
+                    eventBindingSource.DataSource = FacebookAPILogic.LoggedInUser.Events;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                if (listBoxEvents.Items.Count == 0)
+                {
+                    MessageBox.Show("No Events to retrieve :(");
+                }
+            }
+
+
+            /*listBoxEvents.Items.Clear();
+            listBoxEvents.DisplayMember = "Name";
+            foreach (Event fbEvent in FacebookAPILogic.LoggedInUser.Events)
+            {
+                listBoxEvents.Items.Add(fbEvent);
+            }
+
+            if (listBoxEvents.Items.Count == 0)
+            {
+                MessageBox.Show("No Events to retrieve :(");
+            }*/
+        }
     }
 
 }
